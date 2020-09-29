@@ -25,7 +25,10 @@ namespace convertmusic2mp3
                     {
                         if (crawlRecursively)
                         {
-                            CrawlFoldersAndConvertNonMp3sToMp3(filePath, crawlRecursively);
+                            CrawlFoldersAndConvertNonMp3sToMp3(
+                                filePath
+                                , crawlRecursively
+                            );
                         }
                     }
                     else
@@ -34,19 +37,7 @@ namespace convertmusic2mp3
                         {
                             if (!isMp3File(filePath))
                             {
-                                if (isExistsMp3VersionOfFileInSameFolder(filePath))
-                                {
-                                    if(isMp3OfEqualQualityOrBetter(filePath, getNameForMp3VersionOfNonMp3(filePath)))
-                                    {
-                                        File.Move(filePath, getParentFolderPathForFile(filePath) + "/" + BACKUP_FOLDER + "/" + Path.GetFileName(filePath));
-                                    }
-                                    else
-                                    {
-                                        File.Delete(getNameForMp3VersionOfNonMp3(filePath));
-                                        convertToMp3(filePath, getNameForMp3VersionOfNonMp3(filePath));
-                                        File.Move(filePath, getParentFolderPathForFile(filePath) + "/" + BACKUP_FOLDER + "/" + Path.GetFileName(filePath));
-                                    }
-                                }
+                                HandleNonMp3File(filePath);
                             }
                         }
                     }
@@ -61,14 +52,98 @@ namespace convertmusic2mp3
             return parentFolderPath;
         }
 
-        public static List<string> getFileList(string folder) { return new List<string>(); }
-        public static bool isFolder(string filePath) { return Directory.Exists(filePath);  } 
-        public static bool isMediaFile(string filePath) { return true; }
-        public static bool isMp3File(string filePath) { return Path.GetExtension(filePath).ToLower() == MP3_FILE_EXTENSION; }
-        public static string getNameForMp3VersionOfNonMp3(string filePath) { return StripExtentionFromFileName(filePath) + MP3_FILE_EXTENSION; }
-        public static string StripExtentionFromFileName(string filePath) { return filePath.Replace(Path.GetExtension(filePath), String.Empty ); }
-        public static bool isExistsMp3VersionOfFileInSameFolder(string filePath) { return fileExists(getNameForMp3VersionOfNonMp3(filePath)); }
-        public static bool isMp3OfEqualQualityOrBetter(string filePath, string filePathMp3Version) { return true; }
+        public static void HandleNonMp3File(string filePath)
+        {
+            if (isExistsMp3VersionOfFileInSameFolder(filePath))
+            {
+                string mp3FileName =
+                    getNameForMp3VersionOfNonMp3(filePath)
+                ;
+                if (isMp3OfEqualQualityOrBetter(
+                    filePath
+                    , mp3FileName
+                ))
+                {
+                    HandleNonMp3WhereHigherQualityMp3Exists(filePath, mp3FileName);
+                }
+                else
+                {
+                    HandleNonMp3WhereLowerQualityMp3Exists(filePath, mp3FileName);
+                }
+            }
+        }
+
+        public static void HandleNonMp3WhereHigherQualityMp3Exists(string filePath, string mp3FileName)
+        {
+            File.Move(
+                filePath
+                , mp3FileName
+                    + "/" + BACKUP_FOLDER
+                    + "/" + Path.GetFileName(filePath)
+            );
+        }
+
+
+        public static void HandleNonMp3WhereLowerQualityMp3Exists(string filePath, string mp3FileName)
+        {
+            File.Delete(
+                        mp3FileName
+                    );
+            convertToMp3(
+                filePath
+                , mp3FileName
+            );
+            File.Move(
+                filePath
+                , getParentFolderPathForFile(filePath)
+                    + "/" + BACKUP_FOLDER
+                    + "/" + Path.GetFileName(filePath)
+            );
+        }
+
+        public static List<string> getFileList(string folder) { 
+            return new List<string>(); 
+        }
+
+        public static bool isFolder(string filePath) { 
+            return Directory.Exists(filePath);  
+        }
+
+        public List<string> getListOfMediaFileExtensions()
+        {
+            List<string> list = new List<string>();
+
+
+
+            return list;
+        }
+
+        public static bool isMediaFile(string filePath) { 
+            return true; 
+        }
+
+        public static bool isMp3File(string filePath) { 
+            return Path.GetExtension(filePath).ToLower() == MP3_FILE_EXTENSION; 
+        }
+
+        public static string getNameForMp3VersionOfNonMp3(string filePath) { 
+            return StripExtentionFromFileName(filePath) + MP3_FILE_EXTENSION; 
+        }
+
+        public static string StripExtentionFromFileName(string filePath) { 
+            return filePath.Replace(Path.GetExtension(filePath), String.Empty ); 
+        }
+
+        public static bool isExistsMp3VersionOfFileInSameFolder(string filePath) { 
+            return File.Exists(getNameForMp3VersionOfNonMp3(filePath)); 
+        }
+
+        public static bool isMp3OfEqualQualityOrBetter(
+            string filePath
+            , string filePathMp3Version
+        ) {
+            return true; 
+        }
         public static void convertToMp3(string filePath, string mp3FileName) { }
 
 
