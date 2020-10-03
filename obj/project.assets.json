@@ -186,9 +186,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nic\\source\\repos\\convertmusic2mp3\\convertmusic2mp3.csproj",
-      "projectName": "convertmusic2mp3",
-      "projectPath": "C:\\Users\\nic\\source\\repos\\convertmusic2mp3\\convertmusic2mp3.csproj",
+      "projectUniqueName": "C:\\Users\\nic\\source\\repos\\convertmusic2mp3\\com.nicdesjardins.convertmusic2mp3.csproj",
+      "projectName": "com.nicdesjardins.convertmusic2mp3",
+      "projectPath": "C:\\Users\\nic\\source\\repos\\convertmusic2mp3\\com.nicdesjardins.convertmusic2mp3.csproj",
       "packagesPath": "C:\\Users\\nic\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\nic\\source\\repos\\convertmusic2mp3\\obj\\",
       "projectStyle": "PackageReference",
